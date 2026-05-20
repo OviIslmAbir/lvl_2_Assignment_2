@@ -12,7 +12,7 @@ export const initDB = async () => {
                 name VARCHAR(255) NOT NULL,
                 email VARCHAR(255) NOT NULL UNIQUE,
                 password TEXT NOT NULL,
-                role VARCHAR(50) DEFAULT 'contributor',
+                role VARCHAR(80) DEFAULT 'contributor',
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
