@@ -18,7 +18,24 @@ const register = async(req: Request, res: Response) => {
         })
     }
 }
-
+const login = async(req: Request, res: Response) => {
+    try{
+        const result = await authService.loginUserInDatabase(req.body)
+        res.status(200).json({
+            status: 'success',
+            message: 'User signed in successfully',
+            data: result
+        })
+    }
+    catch (error: any) {
+        res.status(500).json({
+            status: 'error',
+            message: 'Failed to sign in user',
+            error: error.message
+        })
+    }
+}
 export const authController = {
-    register
+    register,
+    login
 }
