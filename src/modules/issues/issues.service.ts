@@ -12,7 +12,41 @@ const createIssueInDatabase = async (payload: Issue, reporterId: number) => {
     )
     return result.rows[0]
 }
+const getAllIssuesFromDatabase = async (query: {
+    sort?: string | undefined
+    type?: string | undefined
+    status?: string | undefined
+}) => {
+    const { sort = "newest", type, status } = query
+
+    const conditions: string[] = []
+    const values: string[] = []
+    let paramCount = 1
+
+    if (type) {
+        conditions.push(`type = $${paramCount}`)
+        values.push(type)
+        paramCount++
+    }
+
+    if (status) {
+        conditions.push(`status = $${paramCount}`)
+        values.push(status)
+        paramCount++
+    }
+
+    const whereClause = conditions.length ? `WHERE ${conditions.join(" AND ")}` : ""
+    const orderClause = sort === "oldest" ? "ASC" : "DESC"
+
+    const result = await pool.query(
+        `SELECT * FROM issues ${whereClause} ORDER BY created_at ${orderClause}`,
+        values
+    )
+
+    return result.rows
+}
 
 export const issueService = {
-    createIssueInDatabase
+    createIssueInDatabase,
+    getAllIssuesFromDatabase
 }

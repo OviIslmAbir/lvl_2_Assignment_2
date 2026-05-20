@@ -25,7 +25,30 @@ const createIssue = async (req: Request, res: Response) => {
         })
     }
 }
+const getAllIssues = async (req: Request, res: Response) => {
+    try {
+        const { sort, type, status } = req.query as {
+            sort?: string
+            type?: string
+            status?: string
+        }
+
+        const issues = await issueService.getAllIssuesFromDatabase({ sort, type, status })
+
+        res.status(200).json({
+            success: true,
+            message: "Issues retrieved successfully",
+            data: issues
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Failed to retrieve issues"
+        })
+    }
+}
 
 export const issueController = {
-    createIssue
+    createIssue,
+    getAllIssues
 }
