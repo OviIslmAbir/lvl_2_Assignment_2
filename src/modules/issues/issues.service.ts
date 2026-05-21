@@ -45,8 +45,18 @@ const getAllIssuesFromDatabase = async (query: {
 
     return result.rows
 }
+const getIssueByIdFromDatabase = async (issueId: number) => {
+    const result = await pool.query(
+        `SELECT * FROM issues WHERE id = $1`,
+        [issueId]
+    )
+    return result.rows[0]
+}
 
 export const issueService = {
     createIssueInDatabase,
-    getAllIssuesFromDatabase
+    getAllIssuesFromDatabase,
+    getIssueByIdFromDatabase
 }
+
+

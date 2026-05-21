@@ -47,8 +47,32 @@ const getAllIssues = async (req: Request, res: Response) => {
         })
     }
 }
+const getIssueById = async (req: Request, res: Response) => {
+    try {
+        const issueId = parseInt(req.params.id as string)
+        const issue = await issueService.getIssueByIdFromDatabase(issueId)
 
+        if (!issue) {
+            return res.status(404).json({
+                success: false,
+                message: "Issue not found"
+            })
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "Issue retrieved successfully",
+            data: issue
+        })
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Failed to retrieve issue"
+        })
+    }
+}
 export const issueController = {
     createIssue,
-    getAllIssues
+    getAllIssues,
+    getIssueById
 }
