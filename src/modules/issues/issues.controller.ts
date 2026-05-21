@@ -19,10 +19,11 @@ const createIssue = async (req: Request, res: Response) => {
             message: "Issue created successfully",
             data: issue
         })
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).json({
             success: false,
-            message: "Failed to create issue"
+            message: "Failed to create issue",
+            error: error.message
         })
     }
 }
@@ -41,10 +42,11 @@ const getAllIssues = async (req: Request, res: Response) => {
             message: "Issues retrieved successfully",
             data: issues
         })
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).json({
             success: false,
-            message: "Failed to retrieve issues"
+            message: "Failed to retrieve issues",
+            error: error.message
         })
     }
 }
@@ -65,10 +67,11 @@ const getIssueById = async (req: Request, res: Response) => {
             message: "Issue retrieved successfully",
             data: issue
         })
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).json({
             success: false,
-            message: "Failed to retrieve issue"
+            message: "Failed to retrieve issue",
+            error: error.message
         })
     }
 }
@@ -110,10 +113,11 @@ const updateIssue = async (req: Request, res: Response) => {
             data: updatedIssue
         })
 
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).json({
             success: false,
-            message: "Failed to update issue"
+            message: "Failed to update issue",
+            error: error.message
         })
     }
 }
@@ -137,10 +141,11 @@ const deleteIssue = async (req: Request, res: Response) => {
             message: "Issue deleted successfully"
         })
 
-    } catch (error) {
+    } catch (error: any) {
         res.status(500).json({
             success: false,
-            message: "Failed to delete issue"
+            message: "Failed to delete issue",
+            error: error.message
         })
     }
 }

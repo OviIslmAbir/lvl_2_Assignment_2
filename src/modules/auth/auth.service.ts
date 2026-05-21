@@ -2,6 +2,8 @@ import { pool } from "../../database/db"
 import bcrypt from "bcryptjs"
 import jwt from "jsonwebtoken"
 import type { User } from "./auth.type"
+
+
 const registerUserInDatabase = async (payload: User) => {
     const { name, email, password, role } = payload
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -28,7 +30,7 @@ const loginUserInDatabase = async (payload: { email: string; password: string })
         email: user.email,
         role: user.role
     }
-    const token = jwt.sign(jwtPayload, "dshdsdgdhd", { expiresIn: '1d' })
+    const token = jwt.sign(jwtPayload, process.env.JWT_SECRET as string, { expiresIn: '1d' })
     return { token, user }
 }
 export const authService = {

@@ -3,6 +3,7 @@ import Jwt, { type JwtPayload } from "jsonwebtoken"
 import type { ROLES } from "../../types"
 import { pool } from "../../database/db"
 
+
 const auth = (...roles: ROLES[]) => {
     return async (req: Request, res: Response, next: NextFunction) => {
         try {
@@ -15,7 +16,7 @@ const auth = (...roles: ROLES[]) => {
                 })
             }
 
-            const decoded = Jwt.verify(token, "dshdsdgdhd") as JwtPayload
+            const decoded = Jwt.verify(token, process.env.JWT_SECRET as string) as JwtPayload
 
             const userData = await pool.query(
                 "SELECT * FROM users WHERE email = $1",
