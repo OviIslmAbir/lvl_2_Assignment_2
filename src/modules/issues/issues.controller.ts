@@ -1,5 +1,6 @@
 import type { Request, Response } from "express"
 import { issueService } from "./issues.service"
+import { USER_ROLE } from "../../types"
 
 const createIssue = async (req: Request, res: Response) => {
     try {
@@ -71,8 +72,59 @@ const getIssueById = async (req: Request, res: Response) => {
         })
     }
 }
+const updateIssue = async (req: Request, res: Response) => {
+    try {
+        const issueId = Number(req.params.id)
+        const user = req.user!
+
+        const issue = await issueService.getIssueByIdFromDatabase(issueId)
+
+        if (!issue) {
+            return res.status(404).json({
+                success: false,
+                message: "Issue not found."
+            })
+        }
+
+        if (user.role === USER_ROLE.contributor) {
+            if (issue.reporter_id !== user.id) {
+                return res.status(403).json({
+                    success: false,
+                    message: "Access denied. You can only update your own issues."
+                })
+            }
+
+            if (issue.status !== "open") {
+                return res.status(403).json({
+                    success: false,
+                    message: "Access denied. You can only update issues with open status."
+                })
+            }
+        }
+
+        const updatedIssue = await issueService.updateIssueInDatabase(issueId, req.body)
+
+        res.status(200).json({
+            success: true,
+            message: "Issue updated successfully",
+            data: updatedIssue
+        })
+
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: "Failed to update issue"
+        })
+    }
+}
+
+
+
+
+
 export const issueController = {
     createIssue,
     getAllIssues,
-    getIssueById
+    getIssueById,
+    updateIssue
 }
